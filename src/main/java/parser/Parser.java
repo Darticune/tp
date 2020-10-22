@@ -432,7 +432,8 @@ public class Parser {
 
     private static Command preparePreview(String commandArgs) throws InvalidInputException {
         if (!commandArgs.isEmpty()) {
-            throw new InvalidInputException("There should not be any arguments for preview.");
+            String errorMessage = "There should not be any arguments for preview." + PreviewCommand.MESSAGE_USAGE;
+            throw new InvalidInputException(errorMessage);
         }
         return new PreviewCommand();
     }

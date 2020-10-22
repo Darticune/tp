@@ -11,13 +11,17 @@ import java.io.IOException;
 
 
 public class ExcludeCommand extends Command {
+    public static final String EXCLUDE_COMMAND_OPTION_MORE = "more";
+    public static final String EXCLUDE_COMMAND_OPTION_LESS = "less";
+    public static final String EXCLUDE_COMMAND_SECONDARY_OPTION_MODULE = "module";
+    public static final String EXCLUDE_COMMAND_SECONDARY_OPTION_CHAPTER = "chapter";
     String type;
     public static final String COMMAND_WORD = "exclude";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Excludes or Includes Modules and Chapters from your "
             + "schedule.\n"
             + "Parameters: more(excludes from schedule)/less(includes into schedule)\n"
-            + "Example: " + COMMAND_WORD + " more\n"
-            + "Example: " + COMMAND_WORD + " less\n";
+            + "Example: " + COMMAND_WORD + " " + EXCLUDE_COMMAND_OPTION_MORE + "\n"
+            + "Example: " + COMMAND_WORD + " " + EXCLUDE_COMMAND_OPTION_LESS + "\n";
 
 
     public ExcludeCommand(String type) {
@@ -27,15 +31,16 @@ public class ExcludeCommand extends Command {
     @Override
     public void execute(Ui ui, Access access, Storage storage) throws InvalidInputException, ExclusionFileException {
         switch (type) {
-        case "more":
+        case EXCLUDE_COMMAND_OPTION_MORE:
             addingToExclusion(ui, storage);
             break;
-        case "less":
+        case EXCLUDE_COMMAND_OPTION_LESS:
             removingFromExclusion(ui, storage);
             break;
         default:
             throw new InvalidInputException("The specified type for the exclude command is invalid.\nThe only valid "
-                    + "types are \"more\" and \"less\".");
+                    + "types are \"" + EXCLUDE_COMMAND_OPTION_MORE + "\" and \"" + EXCLUDE_COMMAND_OPTION_LESS + "\"."
+                    + MESSAGE_USAGE);
         }
     }
 
@@ -63,8 +68,8 @@ public class ExcludeCommand extends Command {
     }
 
     public void addingToExclusion(Ui ui, Storage storage) throws InvalidInputException, ExclusionFileException {
-        String type = ui.chooseModuleOrChapterExclusion("more");
-        if (type.equals("module")) {
+        String type = ui.chooseModuleOrChapterExclusion(EXCLUDE_COMMAND_OPTION_MORE);
+        if (type.equals(EXCLUDE_COMMAND_SECONDARY_OPTION_MODULE)) {
             addModuleToExclusion(storage, ui, type);
         } else {
             addChapterToExclusion(storage, ui, type);
@@ -95,8 +100,8 @@ public class ExcludeCommand extends Command {
     }
 
     public void removingFromExclusion(Ui ui, Storage storage) throws ExclusionFileException, InvalidInputException {
-        String type = ui.chooseModuleOrChapterExclusion("less");
-        if (type.equals("module")) {
+        String type = ui.chooseModuleOrChapterExclusion(EXCLUDE_COMMAND_OPTION_LESS);
+        if (type.equals(EXCLUDE_COMMAND_SECONDARY_OPTION_MODULE)) {
             removeModuleFromExclusion(storage, ui, type);
         } else {
             removeChapterFromExclusion(storage, ui, type);
